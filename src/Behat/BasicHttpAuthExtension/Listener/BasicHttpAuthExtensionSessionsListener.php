@@ -42,67 +42,9 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        $priority = self::getBeforeScenarioListenerPriority();
-
         return array(
-          ScenarioTested::BEFORE => array('setBasicAuth', $priority),
+          ScenarioTested::BEFORE => array('setBasicAuth', 9),
         );
-    }
-
-    /**
-     * Returns priority for the handler the beforeScenarioTested event based on
-     * lowest priority of MinkSessionListener handlers.
-     *
-     * @return int
-     */
-    protected static function getBeforeScenarioListenerPriority()
-    {
-
-        // Set default priority for the event handler.
-        $priority = 9;
-
-        /**
-         * Get events list on which Mink session listener is subscribed.
-         *
-         * @var array $minkSubscribedEvents
-         */
-        $minkSubscribedEvents = MinkSessionListener::getSubscribedEvents();
-
-        /*
-         * Check if Mink extension is subscribed to the beforeScenarioTested
-         * event and return default priority if it isn't.
-         */
-        if (empty($minkSubscribedEvents[ScenarioTested::BEFORE])) {
-            return $priority;
-        }
-
-        /**
-         * Get Mink handlers for beforeScenarioTested event.
-         *
-         * @var array|string $params
-         */
-        $params = $minkSubscribedEvents[ScenarioTested::BEFORE];
-
-        if (is_string($params)) {
-            return -1;
-        }
-
-        if (!is_array($params[0])) {
-            $params = array($params);
-        }
-
-        // Get the lowest priority of existing event handlers.
-        $priority = array_reduce(
-          $params,
-          function ($carry, $item) {
-              $item = array_replace(array($item[0], -1), $item);
-              return min($carry, $item[1] - 1);
-          },
-          $priority
-        );
-
-
-        return $priority;
     }
 
     /**
