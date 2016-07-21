@@ -83,23 +83,24 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
          */
         $params = $minkSubscribedEvents[ScenarioTested::BEFORE];
 
-        if (is_string($params[0])) {
-            $params = array_replace(array($params[0], -1), $params);
-            $priority = $params[1];
+        if (is_string($params)) {
+            return -1;
+        }
+
+        if (!is_array($params[0])) {
+            $params = array($params);
         }
 
         // Get the lowest priority of existing event handlers.
-        if (is_array($params[0])) {
+        $priority = array_reduce(
+          $params,
+          function ($carry, $item) {
+              $item = array_replace(array($item[0], -1), $item);
+              return min($carry, $item[1] - 1);
+          },
+          $priority
+        );
 
-            $priority = array_reduce(
-              $params,
-              function ($carry, $item) {
-                  $item = array_replace(array($item[0], -1), $item);
-                  return min($carry, $item[1] - 1);
-              },
-              $priority
-            );
-        }
 
         return $priority;
     }
