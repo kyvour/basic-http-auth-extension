@@ -1,0 +1,23 @@
+{
+  "name": "kyvour/basic-http-auth-extension",
+  "type": "behat-extension",
+  "description": "Basic HTTP Auth extension for Behat",
+  "keywords": ["behat", "web", "test", "http auth", "basic auth"],
+  "homepage": "https://github.com/kyvour/basic-http-auth-extension",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Andriy Yustyk",
+      "email": "a.yustyk@gmail.com"
+    }
+  ],
+  "require": {
+    "behat/mink-extension": "~2.0"
+  },
+  "config": {
+    "bin-dir": "bin/"
+  },
+  "autoload": {
+    "psr-0": {"Behat\\": "src/"}
+  }
+}
