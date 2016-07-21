@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\BasicHttpAuthExtension\ServiceContainer;
+namespace BasicHttpAuthExtension\ServiceContainer;
 
 use Behat\EnvironmentLoader;
 use Behat\MinkExtension\ServiceContainer\MinkExtension;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\BasicHttpAuthExtension\Listener;
+namespace BasicHttpAuthExtension\Listener;
 
 use Behat\Behat\EventDispatcher\Event\ScenarioTested;
 use Behat\Mink\Mink;
