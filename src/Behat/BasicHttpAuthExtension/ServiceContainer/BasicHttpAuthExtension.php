@@ -2,8 +2,8 @@
 
 namespace Behat\BasicHttpAuthExtension\ServiceContainer;
 
-use Behat\EnvironmentLoader;
 use Behat\MinkExtension\ServiceContainer\MinkExtension;
+use Behat\Behat\Context\ServiceContainer\ContextExtension;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
 use Behat\Testwork\ServiceContainer\Extension as ExtensionInterface;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
@@ -29,7 +29,7 @@ class BasicHttpAuthExtension implements ExtensionInterface
      */
     public function getConfigKey()
     {
-        return 'basicHttpAuth';
+        return 'basichttpauth';
     }
 
     /**
@@ -128,13 +128,36 @@ class BasicHttpAuthExtension implements ExtensionInterface
      */
     public function load(ContainerBuilder $containerBuilder, array $config)
     {
-        $loader = new EnvironmentLoader($this, $containerBuilder, $config);
-        $loader->load();
-
+        $this->loadContextInitializer($containerBuilder);
         $this->loadSessionsListener($containerBuilder);
 
-        $containerBuilder->setParameter('basicHttpAuth.parameters', $config);
-        $containerBuilder->setParameter('basicHttpAuth.auth', $config['auth']);
+        $containerBuilder->setParameter('basichttpauth.parameters', $config);
+        $containerBuilder->setParameter('basichttpauth.auth', $config['auth']);
+    }
+
+  /**
+   * Creates a definition for a context initializer.
+   *
+   * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+   *
+   * @throws \Symfony\Component\DependencyInjection\Exception\BadMethodCallException
+   */
+    private function loadContextInitializer(ContainerBuilder $container)
+    {
+      $definition = new Definition(
+        'Behat\BasicHttpAuthExtension\Context\BasicHttpAuthContextInitializer',
+        array('%basichttpauth.parameters%')
+      );
+
+      $definition->addTag(
+        ContextExtension::INITIALIZER_TAG,
+        array('priority' => 0)
+      );
+
+      $container->setDefinition(
+        'basichttpauth.context.initializer',
+        $definition
+      );
     }
 
     /**
@@ -149,7 +172,7 @@ class BasicHttpAuthExtension implements ExtensionInterface
     {
         $definition = new Definition(
           'Behat\BasicHttpAuthExtension\Listener\BasicHttpAuthSessionsListener',
-          array(new Reference(MinkExtension::MINK_ID), '%basicHttpAuth.auth%')
+          array(new Reference(MinkExtension::MINK_ID), '%basichttpauth.auth%')
         );
 
         $definition->addTag(
@@ -158,7 +181,7 @@ class BasicHttpAuthExtension implements ExtensionInterface
         );
 
         $containerBuilder->setDefinition(
-          'basicHttpAuth.listener.sessions',
+          'basichttpauth.listener.sessions',
           $definition
         );
     }
