@@ -69,27 +69,27 @@ class BasicHttpAuthExtension implements ExtensionInterface
       /**
        * @var \Closure $ifNotValidUser
        *
-       * @param $v
+       * @param $value
        *
        * @return bool
        *  Boolean flag if user parameter for Basic Http Auth is invalid.
        *  The user parameter should be null, false or non empty string.
        */
-      $ifNotValidUser = function($v) {
-        return !(null === $v || false === $v || (is_string($v) && '' !== $v));
+      $ifNotValidUser = function($value) {
+        return !(null === $value || false === $value || (is_string($value) && '' !== $value));
       };
 
       /**
        * @var \Closure $ifNotValidPass
        *
-       * @param $v
+       * @param $value
        *
        * @return bool
        *  Boolean flag if password parameter for Basic Http Auth is invalid.
        *  The password should be a string.
        */
-      $ifNotValidPass = function($v) {
-        return !is_string($v);
+      $ifNotValidPass = function($value) {
+        return !is_string($value);
       };
 
       // Build configuration's array node.
