@@ -9,8 +9,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 
 /**
- * BasicHttpAuth sessions listener.
- * Listens Behat events and configures Mink sessions.
+ * BasicHttpAuth sessions listener for Mink session updating.
  */
 class BasicHttpAuthSessionsListener implements EventSubscriberInterface
 {
@@ -27,10 +26,6 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
 
 
     /**
-     * BasicHttpAuth session listener constructor.
-     * Stores Mink instance and Basic HTTP Auth configuration for Mink session
-     * updates.
-     *
      * @param Mink $mink
      * @param array $auth
      */
@@ -42,19 +37,6 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
 
     /**
      * Returns an array of event names this subscriber wants to listen to.
-     *
-     * The array keys are event names and the value can be:
-     *
-     *  * The method name to call (priority defaults to 0)
-     *  * An array composed of the method name to call and the priority
-     *  * An array of arrays composed of the method names to call and respective
-     *    priorities, or 0 if unset
-     *
-     * For instance:
-     *
-     *  * array('eventName' => 'methodName')
-     *  * array('eventName' => array('methodName', $priority))
-     *  * array('eventName' => array(array('methodName1', $priority), array('methodName2')))
      *
      * @return array<*,array<string|integer>> The event names to listen to
      */
@@ -68,19 +50,17 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
     }
 
     /**
-     * Returns priority for the handler of BasicHttpAuthSessionsListener for the
-     * beforeScenarioTested event based on lowest priority of
-     * MinkSessionListener handlers.
+     * Returns priority for the handler the beforeScenarioTested event based on
+     * lowest priority of MinkSessionListener handlers.
      *
      * @return int
      */
     protected static function getBeforeScenarioListenerPriority()
     {
-        /*
+        /**
          * Set default priority for the event handler.
-         * Mink session listener has priority 10, so by default BasicHttpAuth
-         * session listener set ups to 9 to make sure that BasicHttpAuth session
-         * listener will be called after the Mink listener.
+         *
+         * @see \Behat\MinkExtension\Listener\SessionsListener::getSubscribedEvents
          */
         $priority = 9;
 
@@ -127,8 +107,7 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
     }
 
     /**
-     * Updates Mink session before each scenario.
-     * Sets Basic HTTP Auth for the current session.
+     * Adds Basic HTTP Auth to the Mink session before each scenario.
      *
      * @throws \InvalidArgumentException
      */
