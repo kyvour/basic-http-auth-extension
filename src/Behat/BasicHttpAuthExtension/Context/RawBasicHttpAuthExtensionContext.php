@@ -15,8 +15,6 @@ class RawBasicHttpAuthContext implements BasicHttpAuthContextInterface
     private $parameters = array();
 
     /**
-     * Set parameters from configuration.
-     *
      * @param array $parameters
      *   An array of parameters from configuration file.
      */

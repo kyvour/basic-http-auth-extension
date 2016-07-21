@@ -75,9 +75,7 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
          * Check if Mink extension is subscribed to the beforeScenarioTested
          * event and return default priority if it isn't.
          */
-        if (empty($minkSubscribedEvents[ScenarioTested::BEFORE]) ||
-          !is_array($minkSubscribedEvents[ScenarioTested::BEFORE])
-        ) {
+        if (empty($minkSubscribedEvents[ScenarioTested::BEFORE])) {
             return $priority;
         }
 
@@ -92,8 +90,9 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
         if (is_array($params[0])) {
             return array_reduce(
               $params,
-              function($carry, $item) {
-                  return array_key_exists(1, $item) ? min($carry, $item[1] - 1) : $carry;
+              function ($carry, $item) {
+                  return array_key_exists(1, $item) ? min($carry,
+                    $item[1] - 1) : $carry;
               },
               $priority
             );

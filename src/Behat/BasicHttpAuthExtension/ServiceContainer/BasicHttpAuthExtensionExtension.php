@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @file This file is part of the Behat BasicHttpAuthExtension.
- */
-
 namespace Behat\BasicHttpAuthExtension\ServiceContainer;
 
 use Behat\EnvironmentLoader;
@@ -40,10 +36,10 @@ class BasicHttpAuthExtension implements ExtensionInterface
      * Initializes other extensions.
      *
      * This method is called immediately after all extensions are activated but
-     * before any extension `configure()` method is called. This allows extensions
-     * to hook into the configuration of other extensions providing such an
-     * extension point.
-     * Need to be implemented due to interface declaration.
+     * before any extension `configure()` method is called. This allows
+     * extensions to hook into the configuration of other extensions providing
+     * such an extension point. Need to be implemented due to interface
+     * declaration.
      *
      * @param ExtensionManager $extensionManager
      */
@@ -52,71 +48,72 @@ class BasicHttpAuthExtension implements ExtensionInterface
 
     }
 
-  /**
-   * Setups default configuration for the extension and provides validation
-   * for this configuration. Usually this configuration will be provided with
-   * behat.yml file.
-   *
-   * @param ArrayNodeDefinition $nodeBuilder
-   *
-   * @throws \InvalidArgumentException
-   * @throws \RuntimeException
-   */
-    public function configure(ArrayNodeDefinition $nodeBuilder) {
-      $invalidUserMsg = 'Invalid Http Auth user `%s`. Value should be null, false or non empty string';
-      $invalidPassMsg = 'Invalid Http Auth password `%s`. Value should be null, false or nin empty string';
+    /**
+     * Setups default configuration for the extension and provides validation
+     * for this configuration. Usually this configuration will be provided with
+     * behat.yml file.
+     *
+     * @param ArrayNodeDefinition $nodeBuilder
+     *
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     */
+    public function configure(ArrayNodeDefinition $nodeBuilder)
+    {
+        $invalidUserMsg = 'Invalid Http Auth user `%s`. Value should be null, false or non empty string';
+        $invalidPassMsg = 'Invalid Http Auth password `%s`. Value should be null, false or nin empty string';
 
-      /**
-       * @var \Closure $ifNotValidUser
-       *
-       * @param $value
-       *
-       * @return bool
-       *  Boolean flag if user parameter for Basic Http Auth is invalid.
-       *  The user parameter should be null, false or non empty string.
-       */
-      $ifNotValidUser = function($value) {
-        return !(null === $value || false === $value || (is_string($value) && '' !== $value));
-      };
+        /**
+         * @var \Closure $ifNotValidUser
+         *
+         * @param $value
+         *
+         * @return bool
+         *  Boolean flag if user parameter for Basic Http Auth is invalid.
+         *  The user parameter should be null, false or non empty string.
+         */
+        $ifNotValidUser = function ($value) {
+            return !(null === $value || false === $value || (is_string($value) && '' !== $value));
+        };
 
-      /**
-       * @var \Closure $ifNotValidPass
-       *
-       * @param $value
-       *
-       * @return bool
-       *  Boolean flag if password parameter for Basic Http Auth is invalid.
-       *  The password should be a string.
-       */
-      $ifNotValidPass = function($value) {
-        return !is_string($value);
-      };
+        /**
+         * @var \Closure $ifNotValidPass
+         *
+         * @param $value
+         *
+         * @return bool
+         *  Boolean flag if password parameter for Basic Http Auth is invalid.
+         *  The password should be a string.
+         */
+        $ifNotValidPass = function ($value) {
+            return !is_string($value);
+        };
 
-      // Build configuration's array node.
-      $nodeBuilder->children()
-        ->arrayNode('auth')
+        // Build configuration's array node.
+        $nodeBuilder->children()
+          ->arrayNode('auth')
           ->addDefaultsIfNotSet()
           ->disallowNewKeysInSubsequentConfigs()
           ->children()
-            ->scalarNode('user')
-              ->defaultNull()
-              ->validate()
-              ->ifTrue($ifNotValidUser)
-                ->thenInvalid($invalidUserMsg)
-              ->end()
-            ->end()
-            ->scalarNode('password')
-              ->treatNullLike('')
-              ->treatFalseLike('')
-              ->defaultValue('')
-              ->validate()
-              ->ifTrue($ifNotValidPass)
-                ->thenInvalid($invalidPassMsg)
-              ->end()
-            ->end()
+          ->scalarNode('user')
+          ->defaultNull()
+          ->validate()
+          ->ifTrue($ifNotValidUser)
+          ->thenInvalid($invalidUserMsg)
           ->end()
-        ->end()
-      ->end();
+          ->end()
+          ->scalarNode('password')
+          ->treatNullLike('')
+          ->treatFalseLike('')
+          ->defaultValue('')
+          ->validate()
+          ->ifTrue($ifNotValidPass)
+          ->thenInvalid($invalidPassMsg)
+          ->end()
+          ->end()
+          ->end()
+          ->end()
+          ->end();
     }
 
     /**
