@@ -138,7 +138,7 @@ class BasicHttpAuthExtension implements ExtensionInterface
   /**
    * Creates a definition for a context initializer.
    *
-   * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+   * @param ContainerBuilder $container
    *
    * @throws \Symfony\Component\DependencyInjection\Exception\BadMethodCallException
    */
@@ -149,10 +149,7 @@ class BasicHttpAuthExtension implements ExtensionInterface
         array('%basichttpauth.parameters%')
       );
 
-      $definition->addTag(
-        ContextExtension::INITIALIZER_TAG,
-        array('priority' => 0)
-      );
+      $definition->addTag(ContextExtension::INITIALIZER_TAG);
 
       $container->setDefinition(
         'basichttpauth.context.initializer',
@@ -175,10 +172,7 @@ class BasicHttpAuthExtension implements ExtensionInterface
           array(new Reference(MinkExtension::MINK_ID), '%basichttpauth.auth%')
         );
 
-        $definition->addTag(
-          EventDispatcherExtension::SUBSCRIBER_TAG,
-          array('priority' => 0)
-        );
+        $definition->addTag(EventDispatcherExtension::SUBSCRIBER_TAG);
 
         $containerBuilder->setDefinition(
           'basichttpauth.listener.sessions',
