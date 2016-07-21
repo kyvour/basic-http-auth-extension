@@ -155,20 +155,17 @@ class BasicHttpAuthExtension implements ExtensionInterface
      */
     private function loadContextInitializer(ContainerBuilder $containerBuilder)
     {
-      $definition = new Definition(
-        'Behat\BasicHttpAuthExtension\Context\BasicHttpAuthContextInitializer',
-        array('%basichttpauth.parameters%')
-      );
+        $def = new Definition(
+          'Behat\BasicHttpAuthExtension\Context\BasicHttpAuthContextInitializer',
+          array('%basichttpauth.parameters%')
+        );
 
-      $this->addDefinitionTag(
-        $definition,
-        ContextExtension::INITIALIZER_TAG
-      );
+        $this->addDefinitionTag($def, ContextExtension::INITIALIZER_TAG);
 
-      $containerBuilder->setDefinition(
-        'basichttpauth.context.initializer',
-        $definition
-      );
+        $containerBuilder->setDefinition(
+          'basichttpauth.context.initializer',
+          $def
+        );
     }
 
     /**
@@ -181,19 +178,16 @@ class BasicHttpAuthExtension implements ExtensionInterface
      */
     private function loadSessionsListener(ContainerBuilder $containerBuilder)
     {
-        $definition = new Definition(
+        $def = new Definition(
           'Behat\BasicHttpAuthExtension\Listener\BasicHttpAuthSessionsListener',
           array(new Reference(MinkExtension::MINK_ID), '%basichttpauth.auth%')
         );
 
-        $this->addDefinitionTag(
-          $definition,
-          EventDispatcherExtension::SUBSCRIBER_TAG
-        );
+        $this->addDefinitionTag($def, EventDispatcherExtension::SUBSCRIBER_TAG);
 
         $containerBuilder->setDefinition(
           'basichttpauth.listener.sessions',
-          $definition
+          $def
         );
     }
 
