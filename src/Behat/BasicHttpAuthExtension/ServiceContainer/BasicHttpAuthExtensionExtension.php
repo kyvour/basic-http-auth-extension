@@ -63,11 +63,11 @@ class BasicHttpAuthExtension implements ExtensionInterface
    * @throws \RuntimeException
    */
     public function configure(ArrayNodeDefinition $nodeBuilder) {
-      $invalidUserMessage = 'Invalid Http Auth user `%s`. Value should be null, false or non empty string';
-      $invalidPasswordMessage = 'Invalid Http Auth password `%s`. Value should be null, false or nin empty string';
+      $invalidUserMsg = 'Invalid Http Auth user `%s`. Value should be null, false or non empty string';
+      $invalidPassMsg = 'Invalid Http Auth password `%s`. Value should be null, false or nin empty string';
 
       /**
-       * @var \Closure $ifNotValidUserClosure
+       * @var \Closure $ifNotValidUser
        *
        * @param $v
        *
@@ -75,12 +75,12 @@ class BasicHttpAuthExtension implements ExtensionInterface
        *  Boolean flag if user parameter for Basic Http Auth is invalid.
        *  The user parameter should be null, false or non empty string.
        */
-      $ifNotValidUserClosure = function($v) {
+      $ifNotValidUser = function($v) {
         return !(null === $v || false === $v || (is_string($v) && '' !== $v));
       };
 
       /**
-       * @var \Closure $ifNotValidPasswordClosure
+       * @var \Closure $ifNotValidPass
        *
        * @param $v
        *
@@ -88,7 +88,7 @@ class BasicHttpAuthExtension implements ExtensionInterface
        *  Boolean flag if password parameter for Basic Http Auth is invalid.
        *  The password should be a string.
        */
-      $ifNotValidPasswordClosure = function($v) {
+      $ifNotValidPass = function($v) {
         return !is_string($v);
       };
 
@@ -101,8 +101,8 @@ class BasicHttpAuthExtension implements ExtensionInterface
             ->scalarNode('user')
               ->defaultNull()
               ->validate()
-              ->ifTrue($ifNotValidUserClosure)
-                ->thenInvalid($invalidUserMessage)
+              ->ifTrue($ifNotValidUser)
+                ->thenInvalid($invalidUserMsg)
               ->end()
             ->end()
             ->scalarNode('password')
@@ -110,8 +110,8 @@ class BasicHttpAuthExtension implements ExtensionInterface
               ->treatFalseLike('')
               ->defaultValue('')
               ->validate()
-              ->ifTrue($ifNotValidPasswordClosure)
-                ->thenInvalid($invalidPasswordMessage)
+              ->ifTrue($ifNotValidPass)
+                ->thenInvalid($invalidPassMsg)
               ->end()
             ->end()
           ->end()
