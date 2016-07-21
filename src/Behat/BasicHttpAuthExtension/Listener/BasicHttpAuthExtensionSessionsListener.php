@@ -57,11 +57,8 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
      */
     protected static function getBeforeScenarioListenerPriority()
     {
-        /**
-         * Set default priority for the event handler.
-         *
-         * @see \Behat\MinkExtension\Listener\SessionsListener::getSubscribedEvents
-         */
+
+        // Set default priority for the event handler.
         $priority = 9;
 
         /**
@@ -86,20 +83,22 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
          */
         $params = $minkSubscribedEvents[ScenarioTested::BEFORE];
 
+        if (is_string($params[0])) {
+            $params = array_replace(array($params[0], -1), $params);
+            $priority = $params[1];
+        }
+
         // Get the lowest priority of existing event handlers.
         if (is_array($params[0])) {
-            return array_reduce(
+
+            $priority = array_reduce(
               $params,
               function ($carry, $item) {
-                  return array_key_exists(1, $item) ? min($carry,
-                    $item[1] - 1) : $carry;
+                  $item = array_replace(array($item[0], -1), $item);
+                  return min($carry, $item[1] - 1);
               },
               $priority
             );
-        }
-
-        if (array_key_exists(1, $params)) {
-            return min($priority, $params[1] - 1);
         }
 
         return $priority;
