@@ -29,7 +29,7 @@ class BasicHttpAuthExtension implements ExtensionInterface
      */
     public function getConfigKey()
     {
-        return 'basichttpauth';
+        return 'basicHttpAuth';
     }
 
     /**
@@ -133,8 +133,8 @@ class BasicHttpAuthExtension implements ExtensionInterface
 
         $this->loadSessionsListener($containerBuilder);
 
-        $containerBuilder->setParameter('basichttpauth.parameters', $config);
-        $containerBuilder->setParameter('basichttpauth.auth', $config['auth']);
+        $containerBuilder->setParameter('basicHttpAuth.parameters', $config);
+        $containerBuilder->setParameter('basicHttpAuth.auth', $config['auth']);
     }
 
     /**
@@ -149,7 +149,7 @@ class BasicHttpAuthExtension implements ExtensionInterface
     {
         $definition = new Definition(
           'Behat\BasicHttpAuthExtension\Listener\BasicHttpAuthSessionsListener',
-          array(new Reference(MinkExtension::MINK_ID), '%basichttpauth.auth%')
+          array(new Reference(MinkExtension::MINK_ID), '%basicHttpAuth.auth%')
         );
 
         $definition->addTag(
@@ -158,7 +158,7 @@ class BasicHttpAuthExtension implements ExtensionInterface
         );
 
         $containerBuilder->setDefinition(
-          'basichttpauth.listener.sessions',
+          'basicHttpAuth.listener.sessions',
           $definition
         );
     }
