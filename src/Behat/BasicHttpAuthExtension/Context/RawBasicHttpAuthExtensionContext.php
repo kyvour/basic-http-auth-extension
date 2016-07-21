@@ -20,7 +20,7 @@ class RawBasicHttpAuthContext implements BasicHttpAuthContextInterface
      */
     public function setBasicHttpAuthParameters(array $parameters)
     {
-        if (empty($this->parameters)) {
+        if (0 === count($this->parameters)) {
             $this->parameters = $parameters;
         }
     }
