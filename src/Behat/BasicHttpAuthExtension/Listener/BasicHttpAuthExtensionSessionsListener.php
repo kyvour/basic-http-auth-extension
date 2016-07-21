@@ -36,8 +36,6 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
     }
 
     /**
-     * Returns an array of event names this subscriber wants to listen to.
-     *
      * @return array<*,array<string|integer>> The event names to listen to
      */
     public static function getSubscribedEvents()
@@ -50,33 +48,23 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
     }
 
     /**
-     * Returns priority for the handler the beforeScenarioTested event based on
-     * lowest priority of MinkSessionListener handlers.
+     * Returns priority for the event handler.
      *
      * @return int
      */
     protected static function getBeforeScenarioListenerPriority()
     {
 
-        // Set default priority for the event handler.
         $priority = 9;
 
-        /**
-         * Get events list on which Mink session listener is subscribed.
-         *
-         * @var array $subscribedEvents
-         */
+        /** @var array $subscribedEvents */
         $subscribedEvents = MinkSessionListener::getSubscribedEvents();
 
         if (empty($subscribedEvents[ScenarioTested::BEFORE])) {
             return $priority;
         }
 
-        /**
-         * Get Mink handlers for beforeScenarioTested event.
-         *
-         * @var array|string $params
-         */
+        /** @var array|string $params */
         $params = $subscribedEvents[ScenarioTested::BEFORE];
 
         if (is_string($params)) {
@@ -87,15 +75,12 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
             $params = array($params);
         }
 
-        // Get the lowest priority of existing event handlers.
         $priority = static::findLowestPriority($params);
 
         return $priority;
     }
 
     /**
-     * Finds lowest priority from the array of event listener handlers.
-     *
      * @param array $params
      *
      * @return int
