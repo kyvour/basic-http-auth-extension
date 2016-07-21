@@ -49,6 +49,17 @@ class BasicHttpAuthExtension implements ExtensionInterface
     }
 
     /**
+     * You can modify the container here before it is dumped to PHP code.
+     * This method need to be implemented due to interface declaration.
+     *
+     * @param ContainerBuilder $containerBuilder
+     */
+    public function process(ContainerBuilder $containerBuilder)
+    {
+
+    }
+
+    /**
      * Setups default configuration for the extension and provides validation
      * for this configuration. Usually this configuration will be provided with
      * behat.yml file.
@@ -135,13 +146,13 @@ class BasicHttpAuthExtension implements ExtensionInterface
         $containerBuilder->setParameter('basichttpauth.auth', $config['auth']);
     }
 
-  /**
-   * Creates a definition for a context initializer.
-   *
-   * @param ContainerBuilder $container
-   *
-   * @throws \Symfony\Component\DependencyInjection\Exception\BadMethodCallException
-   */
+    /**
+     * Creates a definition for a context initializer.
+     *
+     * @param ContainerBuilder $container
+     *
+     * @throws \Symfony\Component\DependencyInjection\Exception\BadMethodCallException
+     */
     private function loadContextInitializer(ContainerBuilder $container)
     {
       $definition = new Definition(
@@ -149,7 +160,10 @@ class BasicHttpAuthExtension implements ExtensionInterface
         array('%basichttpauth.parameters%')
       );
 
-      $definition->addTag(ContextExtension::INITIALIZER_TAG);
+      $this->addDefinitionTag(
+        $definition,
+        ContextExtension::INITIALIZER_TAG
+      );
 
       $container->setDefinition(
         'basichttpauth.context.initializer',
@@ -172,7 +186,10 @@ class BasicHttpAuthExtension implements ExtensionInterface
           array(new Reference(MinkExtension::MINK_ID), '%basichttpauth.auth%')
         );
 
-        $definition->addTag(EventDispatcherExtension::SUBSCRIBER_TAG);
+        $this->addDefinitionTag(
+          $definition,
+          EventDispatcherExtension::SUBSCRIBER_TAG
+        );
 
         $containerBuilder->setDefinition(
           'basichttpauth.listener.sessions',
@@ -181,13 +198,14 @@ class BasicHttpAuthExtension implements ExtensionInterface
     }
 
     /**
-     * You can modify the container here before it is dumped to PHP code.
-     * This method need to be implemented due to interface declaration.
+     * Adds tag to definition.
      *
-     * @param ContainerBuilder $containerBuilder
+     * @param Definition $definition
+     * @param string $tag
      */
-    public function process(ContainerBuilder $containerBuilder)
+    private function addDefinitionTag(Definition $definition, $tag)
     {
-
+      $definition->addTag($tag, array('priority' => 0));
     }
+
 }
