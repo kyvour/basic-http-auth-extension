@@ -16,8 +16,5 @@
   },
   "config": {
     "bin-dir": "bin/"
-  },
-  "autoload": {
-    "psr-0": {"Behat\\BasicHttpAuthExtension": "src/"}
   }
 }
