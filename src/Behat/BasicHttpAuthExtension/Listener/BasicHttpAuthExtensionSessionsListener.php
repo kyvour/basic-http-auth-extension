@@ -113,7 +113,7 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
         if (is_array($params[0])) {
             $priority = array_reduce(
               $params,
-              function ($carry, $item) {
+              function($carry, $item) {
                   return isset($item[1]) ? min($carry, $item[1] - 1) : $carry;
               },
               $priority
