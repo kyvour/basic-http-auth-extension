@@ -1,6 +1,6 @@
 <?php
 
-namespace BasicHttpAuthExtension\Context;
+namespace Behat\BasicHttpAuthExtension\Context;
 
 /**
  * Class RawBasicHttpAuthContext.
