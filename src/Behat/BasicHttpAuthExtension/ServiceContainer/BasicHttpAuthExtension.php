@@ -149,11 +149,11 @@ class BasicHttpAuthExtension implements ExtensionInterface
     /**
      * Creates a definition for a context initializer.
      *
-     * @param ContainerBuilder $container
+     * @param ContainerBuilder $containerBuilder
      *
      * @throws \Symfony\Component\DependencyInjection\Exception\BadMethodCallException
      */
-    private function loadContextInitializer(ContainerBuilder $container)
+    private function loadContextInitializer(ContainerBuilder $containerBuilder)
     {
       $definition = new Definition(
         'Behat\BasicHttpAuthExtension\Context\BasicHttpAuthContextInitializer',
@@ -165,7 +165,7 @@ class BasicHttpAuthExtension implements ExtensionInterface
         ContextExtension::INITIALIZER_TAG
       );
 
-      $container->setDefinition(
+      $containerBuilder->setDefinition(
         'basichttpauth.context.initializer',
         $definition
       );
