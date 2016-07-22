@@ -2,6 +2,7 @@
 
 namespace Behat\BasicHttpAuthExtension\ServiceContainer;
 
+use Behat\BasicHttpAuthExtension\Validation\BasicHttpAuthConfigValidator;
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
 use Behat\MinkExtension\ServiceContainer\MinkExtension;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
@@ -21,31 +22,6 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class BasicHttpAuthExtension implements ExtensionInterface
 {
-
-    /**
-     * Validates value of the user setting for the Basic HTTP Auth.
-     *
-     * @param mixed $value
-     *
-     * @return bool
-     */
-    private static function configUserValidate($value)
-    {
-        return !(null === $value || false === $value || (is_string($value) && '' !== $value));
-    }
-
-    /**
-     * Validates value of the password setting for the Basic HTTP Auth.
-     *
-     * @param mixed $value
-     *
-     * @return bool
-     */
-    private static function configPassValidate($value)
-    {
-        return !is_string($value);
-    }
-
     /**
      * Returns the BasicHttpAuthExtension config key.
      *
@@ -95,6 +71,8 @@ class BasicHttpAuthExtension implements ExtensionInterface
      */
     public function configure(ArrayNodeDefinition $nodeBuilder)
     {
+        $validator = new BasicHttpAuthConfigValidator();
+
         // Build configuration's array node.
         $nodeBuilder->children()
           ->arrayNode('auth')
@@ -104,7 +82,7 @@ class BasicHttpAuthExtension implements ExtensionInterface
           ->scalarNode('user')
           ->defaultNull()
           ->validate()
-          ->ifTrue(array('BasicHttpAuthExtension', 'configUserValidate'))
+          ->ifTrue($validator->validateConfigUser())
           ->thenInvalid(self::getConfigErrorMessage('user'))
           ->end()
           ->end()
@@ -113,7 +91,7 @@ class BasicHttpAuthExtension implements ExtensionInterface
           ->treatFalseLike('')
           ->defaultValue('')
           ->validate()
-          ->ifTrue(array('BasicHttpAuthExtension', 'configPassValidate'))
+          ->ifTrue($validator->validateConfigPass())
           ->thenInvalid(self::getConfigErrorMessage('password'))
           ->end()
           ->end()
