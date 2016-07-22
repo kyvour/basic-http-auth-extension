@@ -36,7 +36,7 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
     }
 
     /**
-     * @return array<string,array<string|integer>>
+     * @return array<*,array<string|integer>>
      *  The event names to listen to
      */
     public static function getSubscribedEvents()
@@ -90,7 +90,7 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
         /**
          * Normalize event handlers array.
          *
-         * @var string|array<string,array<string|integer>> $params
+         * @var string|array<*,array<string|integer>> $params
          */
         if (!is_array($params[0])) {
             $params = array($params);
