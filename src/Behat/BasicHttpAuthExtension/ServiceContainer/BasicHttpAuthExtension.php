@@ -2,8 +2,8 @@
 
 namespace Behat\BasicHttpAuthExtension\ServiceContainer;
 
-use Behat\MinkExtension\ServiceContainer\MinkExtension;
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
+use Behat\MinkExtension\ServiceContainer\MinkExtension;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
 use Behat\Testwork\ServiceContainer\Extension as ExtensionInterface;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
@@ -21,6 +21,30 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class BasicHttpAuthExtension implements ExtensionInterface
 {
+
+    /**
+     * Validates value of the user setting for the Basic HTTP Auth.
+     *
+     * @param mixed $value
+     *
+     * @return bool
+     */
+    private static function configUserValidate($value)
+    {
+        return !(null === $value || false === $value || (is_string($value) && '' !== $value));
+    }
+
+    /**
+     * Validates value of the password setting for the Basic HTTP Auth.
+     *
+     * @param mixed $value
+     *
+     * @return bool
+     */
+    private static function configPassValidate($value)
+    {
+        return !is_string($value);
+    }
 
     /**
      * Returns the BasicHttpAuthExtension config key.
@@ -71,35 +95,6 @@ class BasicHttpAuthExtension implements ExtensionInterface
      */
     public function configure(ArrayNodeDefinition $nodeBuilder)
     {
-        $invalidUserMsg = 'Invalid Http Auth user `%s`. Value should be null, false or non empty string';
-        $invalidPassMsg = 'Invalid Http Auth password `%s`. Value should be null, false or nin empty string';
-
-        /**
-         * @var \Closure $ifNotValidUser
-         *
-         * @param $value
-         *
-         * @return bool
-         *  Boolean flag if user parameter for Basic Http Auth is invalid.
-         *  The user parameter should be null, false or non empty string.
-         */
-        $ifNotValidUser = function ($value) {
-            return !(null === $value || false === $value || (is_string($value) && '' !== $value));
-        };
-
-        /**
-         * @var \Closure $ifNotValidPass
-         *
-         * @param $value
-         *
-         * @return bool
-         *  Boolean flag if password parameter for Basic Http Auth is invalid.
-         *  The password should be a string.
-         */
-        $ifNotValidPass = function ($value) {
-            return !is_string($value);
-        };
-
         // Build configuration's array node.
         $nodeBuilder->children()
           ->arrayNode('auth')
@@ -109,8 +104,8 @@ class BasicHttpAuthExtension implements ExtensionInterface
           ->scalarNode('user')
           ->defaultNull()
           ->validate()
-          ->ifTrue($ifNotValidUser)
-          ->thenInvalid($invalidUserMsg)
+          ->ifTrue(array('BasicHttpAuthExtension', 'configUserValidate'))
+          ->thenInvalid(self::getConfigErrorMessage('user'))
           ->end()
           ->end()
           ->scalarNode('password')
@@ -118,13 +113,37 @@ class BasicHttpAuthExtension implements ExtensionInterface
           ->treatFalseLike('')
           ->defaultValue('')
           ->validate()
-          ->ifTrue($ifNotValidPass)
-          ->thenInvalid($invalidPassMsg)
+          ->ifTrue(array('BasicHttpAuthExtension', 'configPassValidate'))
+          ->thenInvalid(self::getConfigErrorMessage('password'))
           ->end()
           ->end()
           ->end()
           ->end()
           ->end();
+    }
+
+    /**
+     * Returns error messages for configs.
+     *
+     * @param string $configKey
+     *
+     * @return string
+     */
+    private static function getConfigErrorMessage($configKey)
+    {
+        switch ($configKey) {
+            case 'user':
+                $msg = 'Invalid Http Auth password `%s`. Value should be null, false or non empty string';
+                break;
+            case 'password':
+                $msg = 'Invalid Http Auth password `%s`. Value should be null, false or nin empty string';
+                break;
+            default:
+                $msg = $configKey . ' setting has invalid value: `%s`';
+                break;
+        }
+
+        return $msg;
     }
 
     /**
@@ -169,6 +188,17 @@ class BasicHttpAuthExtension implements ExtensionInterface
     }
 
     /**
+     * Adds tag to definition.
+     *
+     * @param Definition $definition
+     * @param string $tag
+     */
+    private function addDefinitionTag(Definition $definition, $tag)
+    {
+        $definition->addTag($tag, array('priority' => 0));
+    }
+
+    /**
      * Creates a definition for a session listener and it to the subscriber's
      * queue in the service container.
      *
@@ -190,16 +220,4 @@ class BasicHttpAuthExtension implements ExtensionInterface
           $def
         );
     }
-
-    /**
-     * Adds tag to definition.
-     *
-     * @param Definition $definition
-     * @param string $tag
-     */
-    private function addDefinitionTag(Definition $definition, $tag)
-    {
-      $definition->addTag($tag, array('priority' => 0));
-    }
-
 }
