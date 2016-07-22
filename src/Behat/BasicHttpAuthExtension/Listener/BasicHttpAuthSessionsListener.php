@@ -40,7 +40,7 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        $priority = static::getBeforeScenarioListenerPriority();
+        $priority = self::getBeforeScenarioListenerPriority();
 
         return array(
           ScenarioTested::BEFORE => array('setBasicAuth', $priority),
@@ -73,7 +73,7 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
             return -1;
         }
 
-        return static::findLowestPriority($params);
+        return self::findLowestPriority($params);
     }
 
     /**
