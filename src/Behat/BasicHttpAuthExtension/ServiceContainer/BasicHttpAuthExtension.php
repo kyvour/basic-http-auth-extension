@@ -2,13 +2,14 @@
 
 namespace Behat\BasicHttpAuthExtension\ServiceContainer;
 
-use Behat\BasicHttpAuthExtension\Validation\BasicHttpAuthConfigValidator;
+use Behat\BasicHttpAuthExtension\Validation\BasicHttpAuthConfigValidator as ConfigValidator;
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
 use Behat\MinkExtension\ServiceContainer\MinkExtension;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
 use Behat\Testwork\ServiceContainer\Extension as ExtensionInterface;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\Config\Definition\Builder\ScalarNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
@@ -71,33 +72,32 @@ class BasicHttpAuthExtension implements ExtensionInterface
      */
     public function configure(ArrayNodeDefinition $nodeBuilder)
     {
-        $validator = new BasicHttpAuthConfigValidator();
-
-        // Build configuration's array node.
-        $nodeBuilder->children()
-          ->arrayNode('auth')
-          ->addDefaultsIfNotSet()
-          ->disallowNewKeysInSubsequentConfigs()
-          ->children()
-          ->scalarNode('user')
-          ->defaultNull()
+        // Http Auth `user` configuration node.
+        $user = new ScalarNodeDefinition('user');
+        $user->defaultNull()
           ->validate()
-          ->ifTrue($validator->validateConfigUser())
+          ->ifTrue(ConfigValidator::validateConfigUser())
           ->thenInvalid(self::getConfigErrorMessage('user'))
           ->end()
-          ->end()
-          ->scalarNode('password')
-          ->treatNullLike('')
+          ->end();
+
+        // Http Auth `password` configuration node.
+        $pass = new ScalarNodeDefinition('password');
+        $pass->treatNullLike('')
           ->treatFalseLike('')
           ->defaultValue('')
           ->validate()
-          ->ifTrue($validator->validateConfigPass())
+          ->ifTrue(ConfigValidator::validateConfigPass())
           ->thenInvalid(self::getConfigErrorMessage('password'))
           ->end()
-          ->end()
-          ->end()
-          ->end()
           ->end();
+
+        // Http Auth `auth` configuration node.
+        $auth = new ArrayNodeDefinition('auth');
+        $auth->addDefaultsIfNotSet()->disallowNewKeysInSubsequentConfigs()
+          ->append($user)->append($pass)->end();
+
+        $nodeBuilder->append($auth)->end();
     }
 
     /**

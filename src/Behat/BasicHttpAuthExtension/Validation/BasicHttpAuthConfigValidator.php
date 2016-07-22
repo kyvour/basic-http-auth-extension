@@ -14,7 +14,7 @@ class BasicHttpAuthConfigValidator
      *
      * @return \Closure
      */
-    public function validateConfigUser()
+    public static function validateConfigUser()
     {
         return function ($value) {
             return !(null === $value || false === $value || (is_string($value) && '' !== $value));
@@ -26,7 +26,7 @@ class BasicHttpAuthConfigValidator
      *
      * @return \Closure
      */
-    public function validateConfigPass()
+    public static function validateConfigPass()
     {
         return function ($value) {
             return !is_string($value);
