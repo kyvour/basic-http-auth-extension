@@ -55,21 +55,25 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
     private static function getBeforeScenarioListenerPriority()
     {
 
-        $priority = 9;
+        $dummyHandler = array(ScenarioTested::BEFORE => array('dummyHandler', 9));
 
-        /** @var array|string $params */
+        /**
+         * Gets Mink's beforeScenario event handlers or use dummy handler when
+         * Mink don't have them.
+         *
+         * @var array|string $params
+         */
         $params = array_replace(
-          array(ScenarioTested::BEFORE => array('dummyHandler', $priority)),
+          $dummyHandler,
           MinkSessionListener::getSubscribedEvents()
         )[ScenarioTested::BEFORE];
 
+        // Returns -1 to make sure that our priority is lover than default.
         if (is_string($params)) {
             return -1;
         }
 
-        $priority = static::findLowestPriority($params);
-
-        return $priority;
+        return static::findLowestPriority($params);
     }
 
     /**
@@ -79,19 +83,20 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
      */
     private static function findLowestPriority(array $params)
     {
+        // Normalize event handlers array.
         if (!is_array($params[0])) {
             $params = array($params);
         }
 
-        foreach ($params as $key => $handler) {
-            $params[$key] = array_replace(array($handler[0], -1), $handler);
-        }
-
-        $params = array_map(function ($element) {
-            return $element[1];
+        /*
+         * Make sure that each handler has priority and replace the element with
+         * this priority.
+         */
+        $params = array_map(function($element) {
+            return array_replace(array($element[0], 0), $element)[1];
         }, $params);
 
-        return min($params);
+        return (min($params) - 1);
     }
 
     /**
