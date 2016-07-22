@@ -2,10 +2,10 @@
 
 namespace Behat\BasicHttpAuthExtension\Listener;
 
-use Behat\Behat\EventDispatcher\Event\ScenarioTested;
-use Behat\Mink\Mink;
-use Behat\MinkExtension\Listener\SessionsListener as MinkSessionListener;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Behat\Behat\EventDispatcher\Event\ScenarioTested;
+use Behat\MinkExtension\Listener\SessionsListener as MinkSessionListener;
+use Behat\Mink\Mink;
 
 
 /**
@@ -36,7 +36,7 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
     }
 
     /**
-     * @return array <string, array<string|integer>>
+     * @return array<string,array<string|integer>>
      *  The event names to listen to
      */
     public static function getSubscribedEvents()
@@ -87,14 +87,20 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
      */
     private static function findLowestPriority(array $params)
     {
-        // Normalize event handlers array.
+        /**
+         * Normalize event handlers array.
+         *
+         * @var string|array<string,array<string|integer>> $params
+         */
         if (!is_array($params[0])) {
             $params = array($params);
         }
 
-        /*
+        /**
          * Make sure that each handler has priority and replace the element with
          * this priority.
+         *
+         * @var int[] $params
          */
         $params = array_map(function($element) {
             return array_replace(array($element[0], 0), $element)[1];
