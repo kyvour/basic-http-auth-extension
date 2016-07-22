@@ -77,9 +77,7 @@ class BasicHttpAuthExtension implements ExtensionInterface
         $user->defaultNull()
           ->validate()
           ->ifTrue(ConfigValidator::validateConfigUser())
-          ->thenInvalid(self::getConfigErrorMessage('user'))
-          ->end()
-          ->end();
+          ->thenInvalid(self::getConfigErrorMessage('user'));
 
         // Http Auth `password` configuration node.
         $pass = new ScalarNodeDefinition('password');
@@ -88,16 +86,14 @@ class BasicHttpAuthExtension implements ExtensionInterface
           ->defaultValue('')
           ->validate()
           ->ifTrue(ConfigValidator::validateConfigPass())
-          ->thenInvalid(self::getConfigErrorMessage('password'))
-          ->end()
-          ->end();
+          ->thenInvalid(self::getConfigErrorMessage('password'));
 
         // Http Auth `auth` configuration node.
         $auth = new ArrayNodeDefinition('auth');
         $auth->addDefaultsIfNotSet()->disallowNewKeysInSubsequentConfigs()
-          ->append($user)->append($pass)->end();
+          ->append($user)->append($pass);
 
-        $nodeBuilder->append($auth)->end();
+        $nodeBuilder->append($auth);
     }
 
     /**
