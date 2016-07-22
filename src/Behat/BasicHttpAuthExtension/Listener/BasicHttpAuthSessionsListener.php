@@ -52,27 +52,19 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
      *
      * @return int
      */
-    protected static function getBeforeScenarioListenerPriority()
+    private static function getBeforeScenarioListenerPriority()
     {
 
         $priority = 9;
 
-        /** @var array $subscribedEvents */
-        $subscribedEvents = MinkSessionListener::getSubscribedEvents();
-
-        if (empty($subscribedEvents[ScenarioTested::BEFORE])) {
-            return $priority;
-        }
-
         /** @var array|string $params */
-        $params = $subscribedEvents[ScenarioTested::BEFORE];
+        $params = array_replace(
+          array(ScenarioTested::BEFORE => array('dummyHandler', $priority)),
+          MinkSessionListener::getSubscribedEvents()
+        )[ScenarioTested::BEFORE];
 
         if (is_string($params)) {
             return -1;
-        }
-
-        if (!is_array($params[0])) {
-            $params = array($params);
         }
 
         $priority = static::findLowestPriority($params);
@@ -85,8 +77,12 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
      *
      * @return int
      */
-    protected static function findLowestPriority(array $params)
+    private static function findLowestPriority(array $params)
     {
+        if (!is_array($params[0])) {
+            $params = array($params);
+        }
+
         foreach ($params as $key => $handler) {
             $params[$key] = array_replace(array($handler[0], -1), $handler);
         }
