@@ -77,6 +77,9 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
     }
 
     /**
+     * Gets over array of arrays of event handlers, adds default priority if it
+     * does not exist and returns minimal priority
+     *
      * @param array $params
      *
      * @return int
