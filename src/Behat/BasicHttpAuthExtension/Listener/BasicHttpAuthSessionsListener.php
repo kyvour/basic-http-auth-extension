@@ -36,7 +36,7 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
     }
 
     /**
-     * @return array <*,array<string|integer>>
+     * @return array <string, array<string|integer>>
      *  The event names to listen to
      */
     public static function getSubscribedEvents()
