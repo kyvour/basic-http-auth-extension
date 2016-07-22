@@ -50,7 +50,7 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
     /**
      * Returns priority for the event handler.
      *
-     * @return int
+     * @return integer
      */
     private static function getBeforeScenarioListenerPriority()
     {
@@ -82,7 +82,7 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
      *
      * @param array $params
      *
-     * @return int
+     * @return integer
      */
     private static function findLowestPriority(array $params)
     {
@@ -99,7 +99,7 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
             return array_replace(array($element[0], 0), $element)[1];
         }, $params);
 
-        return (min($params) - 1);
+        return min($params) - 1;
     }
 
     /**
