@@ -131,13 +131,6 @@ checks:
     assignment_of_null_return: true
     argument_type_checks: true
 
-tools:
-  php_code_sniffer:
-    config:
-      standard: "PSR2"
-  php_cs_fixer:
-    config: { level: psr2 }
-
 coding_style:
   php:
     spaces:
@@ -167,3 +160,11 @@ coding_style:
         general: lower
       constants:
         true_false_null: lower
+
+tools:
+  php_code_sniffer:
+    config:
+      standard: "PSR2"
+  php_cs_fixer:
+    config:
+      level: psr2
