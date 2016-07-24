@@ -74,7 +74,7 @@ class BasicHttpAuthExtension implements ExtensionInterface
         $builder = new BasicHttpAuthConfigBuilder();
         $auth = $builder->buildAuthArrayNode();
 
-        $nodeBuilder->append($auth)->end();
+        $nodeBuilder->append($auth);
     }
 
     /**
