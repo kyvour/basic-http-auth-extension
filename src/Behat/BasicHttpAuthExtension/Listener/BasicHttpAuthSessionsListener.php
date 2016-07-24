@@ -63,48 +63,48 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
          * Gets Mink's beforeScenario event handlers or use dummy array when
          * Mink don't have them.
          *
-         * @var array|string $handlers
+         * @var array|string $eventHandlers
          */
-        $handlers = array_replace($dummyArray, $minkEvents)[$eventName];
+        $eventHandlers = array_replace($dummyArray, $minkEvents)[$eventName];
 
         // Returns -1 to make sure that our priority is lover than default.
-        if (is_string($handlers)) {
+        if (is_string($eventHandlers)) {
             return -1;
         }
 
-        return self::findLowestPriority($handlers);
+        return self::findLowestPriority($eventHandlers);
     }
 
     /**
      * Gets over array of arrays of event handlers, adds default priority if it
      * does not exist and returns minimal priority
      *
-     * @param array $handlers
+     * @param array $eventHandlers
      *
      * @return integer
      */
-    private static function findLowestPriority(array $handlers)
+    private static function findLowestPriority(array $eventHandlers
     {
         /**
          * Normalize event handlers array.
          *
-         * @var string|array<*,array<string|integer>> $handlers
+         * @var string|array<*,array<string|integer>> $eventHandlers
          */
-        if (!is_array($handlers[0])) {
-            $handlers = array($handlers);
+        if (!is_array($eventHandlers[0])) {
+            $eventHandlers = array($eventHandlers);
         }
 
         /**
          * Make sure that each handler has priority and replace the element with
          * this priority.
          *
-         * @var int[] $handlers
+         * @var int[] $eventHandlers
          */
-        $handlers = array_map(function ($element) {
+        $eventHandlers = array_map(function ($element) {
             return array_replace(array($element[0], 0), $element)[1];
-        }, $handlers);
+        }, $eventHandlers);
 
-        return min($handlers) - 1;
+        return min($eventHandlers) - 1;
     }
 
     /**
