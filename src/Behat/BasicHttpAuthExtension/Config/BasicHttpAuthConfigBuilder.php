@@ -42,7 +42,7 @@ class BasicHttpAuthConfigBuilder
         $user = new ScalarNodeDefinition('user');
         $user->defaultNull()
             ->validate()
-            ->ifTrue(BasicHttpAuthConfigValidator::validateConfigUser())
+            ->ifTrue(BasicHttpAuthConfigValidator::getUserValidationClosure())
             ->thenInvalid(self::getConfigErrorMessage('user'))
             ->end()
             ->end();
@@ -64,7 +64,7 @@ class BasicHttpAuthConfigBuilder
             ->treatFalseLike('')
             ->defaultValue('')
             ->validate()
-            ->ifTrue(BasicHttpAuthConfigValidator::validateConfigPass())
+            ->ifTrue(BasicHttpAuthConfigValidator::getPassValidationClosure())
             ->thenInvalid(self::getConfigErrorMessage('password'))
             ->end()
             ->end();

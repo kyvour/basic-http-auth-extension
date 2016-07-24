@@ -5,16 +5,16 @@ namespace Behat\BasicHttpAuthExtension\Config;
 
 /**
  * Class BasicHttpAuthConfigValidator.
- * Used for config nodes validation.
+ * Used for building closures for config validation.
  */
 class BasicHttpAuthConfigValidator
 {
     /**
-     * Validates value of the user setting for the Basic HTTP Auth.
+     * Returns closure for validation of user setting.
      *
      * @return \Closure
      */
-    public static function validateConfigUser()
+    public static function getUserValidationClosure()
     {
         return function ($value) {
             return !(null === $value || false === $value || (is_string($value) && '' !== $value));
@@ -22,11 +22,11 @@ class BasicHttpAuthConfigValidator
     }
 
     /**
-     * Validates value of the password setting for the Basic HTTP Auth.
+     * Returns closure for validation of password setting.
      *
      * @return \Closure
      */
-    public static function validateConfigPass()
+    public static function getPassValidationClosure()
     {
         return function ($value) {
             return !is_string($value);
