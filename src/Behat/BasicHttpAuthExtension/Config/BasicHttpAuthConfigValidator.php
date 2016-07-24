@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\BasicHttpAuthExtension\Validation;
+namespace Behat\BasicHttpAuthExtension\Config;
 
 
 /**

@@ -2,14 +2,13 @@
 
 namespace Behat\BasicHttpAuthExtension\ServiceContainer;
 
-use Behat\BasicHttpAuthExtension\Validation\BasicHttpAuthConfigValidator as ConfigValidator;
+use Behat\BasicHttpAuthExtension\Config\BasicHttpAuthConfigBuilder;
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
 use Behat\MinkExtension\ServiceContainer\MinkExtension;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
 use Behat\Testwork\ServiceContainer\Extension as ExtensionInterface;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
-use Symfony\Component\Config\Definition\Builder\ScalarNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
@@ -72,52 +71,10 @@ class BasicHttpAuthExtension implements ExtensionInterface
      */
     public function configure(ArrayNodeDefinition $nodeBuilder)
     {
-        // Http Auth `user` configuration node.
-        $user = new ScalarNodeDefinition('user');
-        $user->defaultNull()
-          ->validate()
-          ->ifTrue(ConfigValidator::validateConfigUser())
-          ->thenInvalid(self::getConfigErrorMessage('user'));
+        $builder = new BasicHttpAuthConfigBuilder();
+        $auth = $builder->buildAuthArrayNode();
 
-        // Http Auth `password` configuration node.
-        $pass = new ScalarNodeDefinition('password');
-        $pass->treatNullLike('')
-          ->treatFalseLike('')
-          ->defaultValue('')
-          ->validate()
-          ->ifTrue(ConfigValidator::validateConfigPass())
-          ->thenInvalid(self::getConfigErrorMessage('password'));
-
-        // Http Auth `auth` configuration node.
-        $auth = new ArrayNodeDefinition('auth');
-        $auth->addDefaultsIfNotSet()->disallowNewKeysInSubsequentConfigs()
-          ->append($user)->append($pass);
-
-        $nodeBuilder->append($auth);
-    }
-
-    /**
-     * Returns error messages for configs.
-     *
-     * @param string $configKey
-     *
-     * @return string
-     */
-    private static function getConfigErrorMessage($configKey)
-    {
-        switch ($configKey) {
-            case 'user':
-                $msg = 'Invalid Http Auth password `%s`. Value should be null, false or non empty string';
-                break;
-            case 'password':
-                $msg = 'Invalid Http Auth password `%s`. Value should be null, false or nin empty string';
-                break;
-            default:
-                $msg = $configKey . ' setting has invalid value: `%s`';
-                break;
-        }
-
-        return $msg;
+        $nodeBuilder->append($auth)->end();
     }
 
     /**
