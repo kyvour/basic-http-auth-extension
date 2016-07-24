@@ -130,7 +130,6 @@ checks:
     avoid_aliased_php_functions: true
     assignment_of_null_return: true
     argument_type_checks: true
-    no_new_line_at_end_of_file: true
 
 tools:
   php_code_sniffer:
