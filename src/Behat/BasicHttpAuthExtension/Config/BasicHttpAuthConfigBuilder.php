@@ -14,6 +14,7 @@ class BasicHttpAuthConfigBuilder
     /**
      * @return ArrayNodeDefinition
      *  Http Auth configuration array node.
+     *
      * @throws \RuntimeException
      * @throws \InvalidArgumentException
      */
@@ -32,6 +33,7 @@ class BasicHttpAuthConfigBuilder
     /**
      * @return ScalarNodeDefinition
      *  Http Auth `user` configuration node definition.
+     *
      * @throws \RuntimeException
      * @throws \InvalidArgumentException
      */
@@ -51,6 +53,7 @@ class BasicHttpAuthConfigBuilder
     /**
      * @return ScalarNodeDefinition
      *  Http Auth `password` configuration node definition.
+     *
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */

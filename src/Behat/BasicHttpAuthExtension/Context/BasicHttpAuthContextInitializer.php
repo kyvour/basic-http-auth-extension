@@ -11,9 +11,7 @@ use Behat\Behat\Context\Initializer\ContextInitializer;
 class BasicHttpAuthContextInitializer implements ContextInitializer
 {
     /**
-     * Parameters of context.
-     *
-     * @var array
+     * @var array Context parameters
      */
     private $parameters = [];
 

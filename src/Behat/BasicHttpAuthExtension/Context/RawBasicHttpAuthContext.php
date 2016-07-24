@@ -8,7 +8,7 @@ namespace Behat\BasicHttpAuthExtension\Context;
 class RawBasicHttpAuthContext implements BasicHttpAuthContextInterface
 {
     /**
-     * Parameters of context.
+     * Context parameters.
      *
      * @var array $parameters
      */
