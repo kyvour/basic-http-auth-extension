@@ -1,11 +1,9 @@
 <?php
 
-namespace Behat\BasicHttpAuthExtension\Config;
-
+namespace Behat\BasicHttpAuthExtension\Utils;
 
 /**
  * Class BasicHttpAuthConfigValidator.
- * Used for building closures for config validation.
  */
 class BasicHttpAuthConfigValidator
 {

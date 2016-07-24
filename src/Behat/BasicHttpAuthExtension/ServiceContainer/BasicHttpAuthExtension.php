@@ -2,7 +2,7 @@
 
 namespace Behat\BasicHttpAuthExtension\ServiceContainer;
 
-use Behat\BasicHttpAuthExtension\Config\BasicHttpAuthConfigBuilder;
+use Behat\BasicHttpAuthExtension\Utils\BasicHttpAuthConfigBuilder;
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
 use Behat\MinkExtension\ServiceContainer\MinkExtension;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;

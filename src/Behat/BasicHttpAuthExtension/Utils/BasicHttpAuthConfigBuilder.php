@@ -1,13 +1,12 @@
 <?php
 
-namespace Behat\BasicHttpAuthExtension\Config;
+namespace Behat\BasicHttpAuthExtension\Utils;
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\ScalarNodeDefinition;
 
 /**
  * Class BasicHttpAuthConfigBuilder.
- * Used for building config nodes.
  */
 class BasicHttpAuthConfigBuilder
 {
