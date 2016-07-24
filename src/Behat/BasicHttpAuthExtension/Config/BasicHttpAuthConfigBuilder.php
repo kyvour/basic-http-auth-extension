@@ -49,6 +49,27 @@ class BasicHttpAuthConfigBuilder
     }
 
     /**
+     * @return ScalarNodeDefinition
+     *  Http Auth `password` configuration node definition.
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     */
+    public function buildPasswordNode()
+    {
+        $pass = new ScalarNodeDefinition('password');
+        $pass->treatNullLike('')
+          ->treatFalseLike('')
+          ->defaultValue('')
+          ->validate()
+          ->ifTrue(BasicHttpAuthConfigValidator::validateConfigPass())
+          ->thenInvalid(self::getConfigErrorMessage('password'))
+          ->end()
+          ->end();
+
+        return $pass;
+    }
+
+    /**
      * Returns error messages for configs.
      *
      * @param string $configKey
@@ -70,27 +91,6 @@ class BasicHttpAuthConfigBuilder
         }
 
         return $msg;
-    }
-
-    /**
-     * @return ScalarNodeDefinition
-     *  Http Auth `password` configuration node definition.
-     * @throws \InvalidArgumentException
-     * @throws \RuntimeException
-     */
-    public function buildPasswordNode()
-    {
-        $pass = new ScalarNodeDefinition('password');
-        $pass->treatNullLike('')
-          ->treatFalseLike('')
-          ->defaultValue('')
-          ->validate()
-          ->ifTrue(BasicHttpAuthConfigValidator::validateConfigPass())
-          ->thenInvalid(self::getConfigErrorMessage('password'))
-          ->end()
-          ->end();
-
-        return $pass;
     }
 
 }

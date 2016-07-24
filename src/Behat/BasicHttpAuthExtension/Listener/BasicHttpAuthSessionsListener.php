@@ -13,7 +13,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class BasicHttpAuthSessionsListener implements EventSubscriberInterface
 {
-
     /**
      * @var Mink
      */
@@ -56,23 +55,17 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
     private static function getBeforeScenarioListenerPriority()
     {
 
-        $dummyHandler = array(
-          ScenarioTested::BEFORE => array(
-            'dummyHandler',
-            9
-          )
-        );
+        $eventName = ScenarioTested::BEFORE;
+        $minkEvents = MinkSessionListener::getSubscribedEvents();
+        $dummyArray = array($eventName => array('dummyArray', 9));
 
         /**
-         * Gets Mink's beforeScenario event handlers or use dummy handler when
+         * Gets Mink's beforeScenario event handlers or use dummy array when
          * Mink don't have them.
          *
          * @var array|string $params
          */
-        $params = array_replace(
-          $dummyHandler,
-          MinkSessionListener::getSubscribedEvents()
-        )[ScenarioTested::BEFORE];
+        $params = array_replace($dummyArray, $minkEvents)[$eventName];
 
         // Returns -1 to make sure that our priority is lover than default.
         if (is_string($params)) {
