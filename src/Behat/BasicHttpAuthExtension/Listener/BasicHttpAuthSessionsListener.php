@@ -79,17 +79,13 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
      * Gets over array of arrays of event handlers, adds default priority if it
      * does not exist and returns minimal priority
      *
-     * @param array $handlers
+     * @param array<*,array<string|integer>> $handlers
      *
      * @return integer
      */
     private static function findLowestPriority(array $handlers)
     {
-        /**
-         * Normalize event handlers array.
-         *
-         * @var string|array<*,array<string|integer>> $handlers
-         */
+        // Normalize event handlers array.
         if (!is_array($handlers[0])) {
             $handlers = array($handlers);
         }
