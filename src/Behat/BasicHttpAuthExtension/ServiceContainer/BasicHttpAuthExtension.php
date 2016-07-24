@@ -2,7 +2,7 @@
 
 namespace Behat\BasicHttpAuthExtension\ServiceContainer;
 
-use Behat\BasicHttpAuthExtension\Utils\BasicHttpAuthConfigBuilder;
+use Behat\BasicHttpAuthExtension\Utils\BasicHttpAuthConfigBuilderUtil as ConfigBuilder;
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
 use Behat\MinkExtension\ServiceContainer\MinkExtension;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
@@ -71,7 +71,7 @@ class BasicHttpAuthExtension implements ExtensionInterface
      */
     public function configure(ArrayNodeDefinition $nodeBuilder)
     {
-        $builder = new BasicHttpAuthConfigBuilder();
+        $builder = new ConfigBuilder();
         $auth = $builder->buildAuthArrayNode();
 
         $nodeBuilder->append($auth);

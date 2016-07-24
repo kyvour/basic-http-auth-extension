@@ -6,9 +6,9 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\ScalarNodeDefinition;
 
 /**
- * Class BasicHttpAuthConfigBuilder.
+ * Class BasicHttpAuthConfigBuilderUtil.
  */
-class BasicHttpAuthConfigBuilder
+class BasicHttpAuthConfigBuilderUtil
 {
     /**
      * @return ArrayNodeDefinition
@@ -41,7 +41,7 @@ class BasicHttpAuthConfigBuilder
         $user = new ScalarNodeDefinition('user');
         $user->defaultNull()
             ->validate()
-            ->ifTrue(BasicHttpAuthConfigValidator::getUserValidationClosure())
+            ->ifTrue(BasicHttpAuthConfigValidatorUtil::getUserValidationClosure())
             ->thenInvalid(self::getConfigErrorMessage('user'))
             ->end()
             ->end();
@@ -63,7 +63,7 @@ class BasicHttpAuthConfigBuilder
             ->treatFalseLike('')
             ->defaultValue('')
             ->validate()
-            ->ifTrue(BasicHttpAuthConfigValidator::getPassValidationClosure())
+            ->ifTrue(BasicHttpAuthConfigValidatorUtil::getPassValidationClosure())
             ->thenInvalid(self::getConfigErrorMessage('password'))
             ->end()
             ->end();

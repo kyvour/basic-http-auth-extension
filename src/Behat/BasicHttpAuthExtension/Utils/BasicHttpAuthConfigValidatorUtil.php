@@ -5,7 +5,7 @@ namespace Behat\BasicHttpAuthExtension\Utils;
 /**
  * Class BasicHttpAuthConfigValidator.
  */
-class BasicHttpAuthConfigValidator
+class BasicHttpAuthConfigValidatorUtil
 {
     /**
      * Returns closure for validation of user setting.

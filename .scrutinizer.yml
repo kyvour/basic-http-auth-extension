@@ -93,13 +93,7 @@ checks:
     function_in_camel_caps: true
     foreach_usable_as_reference: true
     foreach_traversable: true
-    fix_use_statements:
-      remove_unused: true
-      preserve_multiple: true
-      preserve_blanklines: true
-      order_alphabetically: true
-    fix_line_ending: true
-    fix_doc_comments: true
+    fix_doc_comments: false
     encourage_single_quotes: true
     encourage_shallow_comparison: true
     encourage_postdec_operator: true

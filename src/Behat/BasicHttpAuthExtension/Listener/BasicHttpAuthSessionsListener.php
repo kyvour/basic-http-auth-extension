@@ -86,9 +86,7 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
     private static function findLowestPriority(array $handlers)
     {
         // Normalize event handlers array.
-        if (!is_array($handlers[0])) {
-            $handlers = array($handlers);
-        }
+        $eventHandlers = !is_array($handlers[0]) ? array($handlers) : $handlers;
 
         /**
          * Make sure that each handler has priority and replace the element with
@@ -98,7 +96,7 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
          */
         $priorities = array_map(function ($element) {
             return array_replace(array($element[0], 0), $element)[1];
-        }, $handlers);
+        }, $eventHandlers);
 
         return min($priorities) - 1;
     }
