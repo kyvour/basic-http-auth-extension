@@ -3,8 +3,8 @@
 namespace Behat\BasicHttpAuthExtension\Listener;
 
 use Behat\Behat\EventDispatcher\Event\ScenarioTested;
-use Behat\Mink\Mink;
 use Behat\MinkExtension\Listener\SessionsListener as MinkSessionListener;
+use Behat\Mink\Mink;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 

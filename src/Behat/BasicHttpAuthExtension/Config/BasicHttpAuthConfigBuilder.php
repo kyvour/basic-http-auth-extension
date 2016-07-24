@@ -83,10 +83,12 @@ class BasicHttpAuthConfigBuilder
     {
         switch ($configKey) {
             case 'user':
-                $msg = 'Invalid Http Auth password `%s`. Value should be null, false or non empty string';
+                $msg = 'Invalid Http Auth password `%s`. '
+                  . 'Value should be null, false or non empty string';
                 break;
             case 'password':
-                $msg = 'Invalid Http Auth password `%s`. Value should be null, false or nin empty string';
+                $msg = 'Invalid Http Auth password `%s`.'
+                  .' Value should be null, false or nin empty string';
                 break;
             default:
                 $msg = $configKey . ' setting has invalid value: `%s`';
