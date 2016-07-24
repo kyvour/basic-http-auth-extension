@@ -83,7 +83,7 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
      *
      * @return integer
      */
-    private static function findLowestPriority(array $eventHandlers
+    private static function findLowestPriority(array $eventHandlers)
     {
         /**
          * Normalize event handlers array.
