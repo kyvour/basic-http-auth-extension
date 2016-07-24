@@ -2,10 +2,10 @@
 
 namespace Behat\BasicHttpAuthExtension\Listener;
 
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Behat\Behat\EventDispatcher\Event\ScenarioTested;
-use Behat\MinkExtension\Listener\SessionsListener as MinkSessionListener;
 use Behat\Mink\Mink;
+use Behat\MinkExtension\Listener\SessionsListener as MinkSessionListener;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 
 /**
@@ -56,7 +56,12 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
     private static function getBeforeScenarioListenerPriority()
     {
 
-        $dummyHandler = array(ScenarioTested::BEFORE => array('dummyHandler', 9));
+        $dummyHandler = array(
+          ScenarioTested::BEFORE => array(
+            'dummyHandler',
+            9
+          )
+        );
 
         /**
          * Gets Mink's beforeScenario event handlers or use dummy handler when
@@ -102,7 +107,7 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
          *
          * @var int[] $params
          */
-        $params = array_map(function($element) {
+        $params = array_map(function ($element) {
             return array_replace(array($element[0], 0), $element)[1];
         }, $params);
 

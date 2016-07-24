@@ -2,7 +2,13 @@
   "name": "kyvour/basic-http-auth-extension",
   "type": "behat-extension",
   "description": "Basic HTTP Auth extension for Behat",
-  "keywords": ["behat", "web", "test", "http auth", "basic auth"],
+  "keywords": [
+    "behat",
+    "web",
+    "test",
+    "http auth",
+    "basic auth"
+  ],
   "homepage": "https://github.com/kyvour/basic-http-auth-extension",
   "license": "MIT",
   "authors": [
@@ -18,6 +24,8 @@
     "bin-dir": "bin/"
   },
   "autoload": {
-    "psr-0": {"Behat\\BasicHttpAuthExtension": "src/"}
+    "psr-0": {
+      "Behat\\BasicHttpAuthExtension": "src/"
+    }
   }
 }

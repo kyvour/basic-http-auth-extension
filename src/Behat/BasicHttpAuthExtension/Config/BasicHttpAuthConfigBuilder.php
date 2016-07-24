@@ -12,6 +12,43 @@ use Symfony\Component\Config\Definition\Builder\ScalarNodeDefinition;
 class BasicHttpAuthConfigBuilder
 {
     /**
+     * @return ArrayNodeDefinition
+     *  Http Auth configuration array node.
+     * @throws \RuntimeException
+     * @throws \InvalidArgumentException
+     */
+    public function buildAuthArrayNode()
+    {
+        $auth = new ArrayNodeDefinition('auth');
+        $auth->addDefaultsIfNotSet()
+          ->disallowNewKeysInSubsequentConfigs()
+          ->append($this->buildUserNode())
+          ->append($this->buildPasswordNode())
+          ->end();
+
+        return $auth;
+    }
+
+    /**
+     * @return ScalarNodeDefinition
+     *  Http Auth `user` configuration node definition.
+     * @throws \RuntimeException
+     * @throws \InvalidArgumentException
+     */
+    public function buildUserNode()
+    {
+        $user = new ScalarNodeDefinition('user');
+        $user->defaultNull()
+          ->validate()
+          ->ifTrue(BasicHttpAuthConfigValidator::validateConfigUser())
+          ->thenInvalid(self::getConfigErrorMessage('user'))
+          ->end()
+          ->end();
+
+        return $user;
+    }
+
+    /**
      * Returns error messages for configs.
      *
      * @param string $configKey
@@ -36,28 +73,13 @@ class BasicHttpAuthConfigBuilder
     }
 
     /**
-     * @return ScalarNodeDefinition Http Auth `user` configuration node definition.
-     * @throws \RuntimeException
-     * @throws \InvalidArgumentException
-     */
-    public function buildUserNode() {
-        $user = new ScalarNodeDefinition('user');
-        $user->defaultNull()
-          ->validate()
-          ->ifTrue(BasicHttpAuthConfigValidator::validateConfigUser())
-          ->thenInvalid(self::getConfigErrorMessage('user'))
-          ->end()
-          ->end();
-
-        return $user;
-    }
-
-    /**
-     * @return ScalarNodeDefinition Http Auth `password` configuration node definition.
+     * @return ScalarNodeDefinition
+     *  Http Auth `password` configuration node definition.
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */
-    public function buildPasswordNode() {
+    public function buildPasswordNode()
+    {
         $pass = new ScalarNodeDefinition('password');
         $pass->treatNullLike('')
           ->treatFalseLike('')
@@ -70,22 +92,5 @@ class BasicHttpAuthConfigBuilder
 
         return $pass;
     }
-
-    /**
-     * @return ArrayNodeDefinition Http Auth configuration array node.
-     * @throws \RuntimeException
-     * @throws \InvalidArgumentException
-     */
-    public function buildAuthArrayNode() {
-        $auth = new ArrayNodeDefinition('auth');
-        $auth->addDefaultsIfNotSet()
-          ->disallowNewKeysInSubsequentConfigs()
-          ->append($this->buildUserNode())
-          ->append($this->buildPasswordNode())
-          ->end();
-
-        return $auth;
-    }
-
 
 }
