@@ -22,10 +22,10 @@ class BasicHttpAuthConfigBuilder
     {
         $auth = new ArrayNodeDefinition('auth');
         $auth->addDefaultsIfNotSet()
-          ->disallowNewKeysInSubsequentConfigs()
-          ->append($this->buildUserNode())
-          ->append($this->buildPasswordNode())
-          ->end();
+            ->disallowNewKeysInSubsequentConfigs()
+            ->append($this->buildUserNode())
+            ->append($this->buildPasswordNode())
+            ->end();
 
         return $auth;
     }
@@ -41,11 +41,11 @@ class BasicHttpAuthConfigBuilder
     {
         $user = new ScalarNodeDefinition('user');
         $user->defaultNull()
-          ->validate()
-          ->ifTrue(BasicHttpAuthConfigValidator::validateConfigUser())
-          ->thenInvalid(self::getConfigErrorMessage('user'))
-          ->end()
-          ->end();
+            ->validate()
+            ->ifTrue(BasicHttpAuthConfigValidator::validateConfigUser())
+            ->thenInvalid(self::getConfigErrorMessage('user'))
+            ->end()
+            ->end();
 
         return $user;
     }
@@ -61,13 +61,13 @@ class BasicHttpAuthConfigBuilder
     {
         $pass = new ScalarNodeDefinition('password');
         $pass->treatNullLike('')
-          ->treatFalseLike('')
-          ->defaultValue('')
-          ->validate()
-          ->ifTrue(BasicHttpAuthConfigValidator::validateConfigPass())
-          ->thenInvalid(self::getConfigErrorMessage('password'))
-          ->end()
-          ->end();
+            ->treatFalseLike('')
+            ->defaultValue('')
+            ->validate()
+            ->ifTrue(BasicHttpAuthConfigValidator::validateConfigPass())
+            ->thenInvalid(self::getConfigErrorMessage('password'))
+            ->end()
+            ->end();
 
         return $pass;
     }
@@ -84,11 +84,11 @@ class BasicHttpAuthConfigBuilder
         switch ($configKey) {
             case 'user':
                 $msg = 'Invalid Http Auth password `%s`. '
-                  . 'Value should be null, false or non empty string';
+                    . 'Value should be null, false or non empty string';
                 break;
             case 'password':
                 $msg = 'Invalid Http Auth password `%s`.'
-                  .' Value should be null, false or nin empty string';
+                    . ' Value should be null, false or nin empty string';
                 break;
             default:
                 $msg = $configKey . ' setting has invalid value: `%s`';

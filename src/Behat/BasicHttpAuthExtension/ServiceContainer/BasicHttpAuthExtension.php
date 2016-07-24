@@ -106,15 +106,15 @@ class BasicHttpAuthExtension implements ExtensionInterface
     private function loadContextInitializer(ContainerBuilder $containerBuilder)
     {
         $def = new Definition(
-          'Behat\BasicHttpAuthExtension\Context\BasicHttpAuthContextInitializer',
-          array('%basichttpauth.parameters%')
+            'Behat\BasicHttpAuthExtension\Context\BasicHttpAuthContextInitializer',
+            array('%basichttpauth.parameters%')
         );
 
         $this->addDefinitionTag($def, ContextExtension::INITIALIZER_TAG);
 
         $containerBuilder->setDefinition(
-          'basichttpauth.context.initializer',
-          $def
+            'basichttpauth.context.initializer',
+            $def
         );
     }
 
@@ -140,15 +140,15 @@ class BasicHttpAuthExtension implements ExtensionInterface
     private function loadSessionsListener(ContainerBuilder $containerBuilder)
     {
         $def = new Definition(
-          'Behat\BasicHttpAuthExtension\Listener\BasicHttpAuthSessionsListener',
-          array(new Reference(MinkExtension::MINK_ID), '%basichttpauth.auth%')
+            'Behat\BasicHttpAuthExtension\Listener\BasicHttpAuthSessionsListener',
+            array(new Reference(MinkExtension::MINK_ID), '%basichttpauth.auth%')
         );
 
         $this->addDefinitionTag($def, EventDispatcherExtension::SUBSCRIBER_TAG);
 
         $containerBuilder->setDefinition(
-          'basichttpauth.listener.sessions',
-          $def
+            'basichttpauth.listener.sessions',
+            $def
         );
     }
 }

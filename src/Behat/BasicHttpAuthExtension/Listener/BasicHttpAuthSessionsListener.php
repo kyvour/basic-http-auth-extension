@@ -43,7 +43,7 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
         $priority = self::getBeforeScenarioListenerPriority();
 
         return array(
-          ScenarioTested::BEFORE => array('setBasicAuth', $priority),
+            ScenarioTested::BEFORE => array('setBasicAuth', $priority),
         );
     }
 
@@ -118,8 +118,8 @@ class BasicHttpAuthSessionsListener implements EventSubscriberInterface
 
         if (null !== $auth['user']) {
             $this->mink->getSession()->setBasicAuth(
-              $auth['user'],
-              $auth['password']
+                $auth['user'],
+                $auth['password']
             );
         }
     }
