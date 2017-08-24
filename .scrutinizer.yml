@@ -173,3 +173,8 @@ tools:
   php_pdepend: true
   php_sim: true
   php_changetracking: true
+
+build:
+  tests:
+    override:
+      - phpcs-run
