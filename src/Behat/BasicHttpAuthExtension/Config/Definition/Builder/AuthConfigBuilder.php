@@ -77,7 +77,7 @@ class AuthConfigBuilder
     protected function invalidUserParameter()
     {
         return function ($user) {
-            // Valid values are false or not empty string.
+            // Valid user value is false or not empty string.
             return !(false === $user || (is_string($user) && '' !== $user));
         };
     }
@@ -113,7 +113,7 @@ class AuthConfigBuilder
     protected function invalidPasswordParameter()
     {
          return function ($pass) {
-            // Valid values are null or false or any string.
+            // Valid password value is null or false or any string.
             return !(null === $pass || false === $pass || is_string($pass));
         };
     }
