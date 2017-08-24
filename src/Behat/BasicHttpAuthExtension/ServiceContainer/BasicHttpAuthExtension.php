@@ -42,7 +42,6 @@ class BasicHttpAuthExtension implements ExtensionInterface
      */
     public function initialize(ExtensionManager $extensionManager)
     {
-
     }
 
     /**
@@ -50,7 +49,6 @@ class BasicHttpAuthExtension implements ExtensionInterface
      */
     public function process(ContainerBuilder $containerBuilder)
     {
-
     }
 
     /**

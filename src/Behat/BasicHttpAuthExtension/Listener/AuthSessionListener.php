@@ -7,7 +7,6 @@ use Behat\Behat\EventDispatcher\Event\ScenarioTested;
 use Behat\Mink\Mink;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-
 /**
  * BasicHttpAuth sessions listener for Mink session updating.
  */
