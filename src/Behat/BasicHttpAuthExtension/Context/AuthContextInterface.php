@@ -2,18 +2,17 @@
 
 namespace Behat\BasicHttpAuthExtension\Context;
 
-use Behat\Behat\Context\SnippetAcceptingContext;
+use Behat\Behat\Context\Context;
 
 /**
  * Interface BasicHttpAuthContextInterface.
  */
-interface BasicHttpAuthContextInterface extends SnippetAcceptingContext
+interface AuthContextInterface extends Context
 {
+
     /**
      * @param array $parameters
-     *   An array of parameters from configuration file.
-     *
-     * @return void
+     *  An array of Basic Auth parameters.
      */
     public function setBasicHttpAuthParameters(array $parameters);
 }

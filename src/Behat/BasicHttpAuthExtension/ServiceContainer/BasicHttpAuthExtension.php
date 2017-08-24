@@ -2,7 +2,9 @@
 
 namespace Behat\BasicHttpAuthExtension\ServiceContainer;
 
-use Behat\BasicHttpAuthExtension\Utils\BasicHttpAuthConfigBuilderUtil as ConfigBuilder;
+use Behat\BasicHttpAuthExtension\Config\Definition\Builder\AuthConfigBuilder;
+use Behat\BasicHttpAuthExtension\Context\Initializer\AuthContextInitializer;
+use Behat\BasicHttpAuthExtension\Listener\AuthSessionListener;
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
 use Behat\MinkExtension\ServiceContainer\MinkExtension;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
@@ -16,32 +18,27 @@ use Symfony\Component\DependencyInjection\Reference;
 /**
  * BasicHttpAuth extension for Behat class.
  *
- * Extensions are the core entities in Testwork. Almost all framework
- * functionality in Testwork and its different implementations is provided
- * through extensions.
+ * This extension extends MinkExtension and allows easily set up Basic HTTP Auth
+ * parameters (i.e. username and password) from behat configuration file.
  */
 class BasicHttpAuthExtension implements ExtensionInterface
 {
+
     /**
-     * Returns the BasicHttpAuthExtension config key.
-     *
-     * @return string
+     * BasicHttpAuthExtension config key.
+     */
+    const CONFIG_KEY = 'basichttpauth';
+
+    /**
+     * {@inheritdoc}
      */
     public function getConfigKey()
     {
-        return 'basichttpauth';
+        return static::CONFIG_KEY;
     }
 
     /**
-     * Initializes other extensions.
-     *
-     * This method is called immediately after all extensions are activated but
-     * before any extension `configure()` method is called. This allows
-     * extensions to hook into the configuration of other extensions providing
-     * such an extension point. Need to be implemented due to interface
-     * declaration.
-     *
-     * @param ExtensionManager $extensionManager
+     * {@inheritdoc}
      */
     public function initialize(ExtensionManager $extensionManager)
     {
@@ -49,10 +46,7 @@ class BasicHttpAuthExtension implements ExtensionInterface
     }
 
     /**
-     * You can modify the container here before it is dumped to PHP code.
-     * This method need to be implemented due to interface declaration.
-     *
-     * @param ContainerBuilder $containerBuilder
+     * {@inheritdoc}
      */
     public function process(ContainerBuilder $containerBuilder)
     {
@@ -60,95 +54,57 @@ class BasicHttpAuthExtension implements ExtensionInterface
     }
 
     /**
-     * Setups default configuration for the extension and provides validation
-     * for this configuration. Usually this configuration will be provided with
-     * behat.yml file.
-     *
-     * @param ArrayNodeDefinition $nodeBuilder
-     *
-     * @throws \InvalidArgumentException
-     * @throws \RuntimeException
+     * {@inheritdoc}
      */
     public function configure(ArrayNodeDefinition $nodeBuilder)
     {
-        $builder = new ConfigBuilder();
-        $auth = $builder->buildAuthArrayNode();
-
-        $nodeBuilder->append($auth);
+        $builder = new AuthConfigBuilder();
+        $nodeBuilder->append($builder->authNode());
     }
 
     /**
-     * Loads BasicHttpAuth extension services into container builder and sets
-     * parameters related to this extension to the ParameterBag (Class which
-     * stores extensions' parameters).
-     *
-     * @param ContainerBuilder $containerBuilder
-     * @param array $config
-     *
-     * @throws \Symfony\Component\DependencyInjection\Exception\BadMethodCallException
+     * {@inheritdoc}
      */
-    public function load(ContainerBuilder $containerBuilder, array $config)
+    public function load(ContainerBuilder $container, array $config)
     {
-        $this->loadContextInitializer($containerBuilder);
-        $this->loadSessionsListener($containerBuilder);
+        $this->loadContextInitializer($container);
+        $this->loadSessionsListener($container);
 
-        $containerBuilder->setParameter('basichttpauth.parameters', $config);
-        $containerBuilder->setParameter('basichttpauth.auth', $config['auth']);
+        $container->setParameter('basichttpauth.parameters', $config);
     }
 
     /**
      * Creates a definition for a context initializer.
      *
-     * @param ContainerBuilder $containerBuilder
-     *
-     * @throws \Symfony\Component\DependencyInjection\Exception\BadMethodCallException
+     * @param ContainerBuilder $container
      */
-    private function loadContextInitializer(ContainerBuilder $containerBuilder)
+    private function loadContextInitializer(ContainerBuilder $container)
     {
-        $def = new Definition(
-            'Behat\BasicHttpAuthExtension\Context\BasicHttpAuthContextInitializer',
-            array('%basichttpauth.parameters%')
+        $definition = new Definition(
+            AuthContextInitializer::class,
+            ['%basichttpauth.parameters%']
         );
+        $definition->addTag(ContextExtension::INITIALIZER_TAG, ['priority' => 0]);
 
-        $this->addDefinitionTag($def, ContextExtension::INITIALIZER_TAG);
-
-        $containerBuilder->setDefinition(
-            'basichttpauth.context.initializer',
-            $def
-        );
-    }
-
-    /**
-     * Adds tag to definition.
-     *
-     * @param Definition $definition
-     * @param string $tag
-     */
-    private function addDefinitionTag(Definition $definition, $tag)
-    {
-        $definition->addTag($tag, array('priority' => 0));
+        $container->setDefinition('basichttpauth.context.initializer', $definition);
     }
 
     /**
      * Creates a definition for a session listener and it to the subscriber's
      * queue in the service container.
      *
-     * @param ContainerBuilder $containerBuilder
-     *
-     * @throws \Symfony\Component\DependencyInjection\Exception\BadMethodCallException
+     * @param ContainerBuilder $container
      */
-    private function loadSessionsListener(ContainerBuilder $containerBuilder)
+    private function loadSessionsListener(ContainerBuilder $container)
     {
-        $def = new Definition(
-            'Behat\BasicHttpAuthExtension\Listener\BasicHttpAuthSessionsListener',
-            array(new Reference(MinkExtension::MINK_ID), '%basichttpauth.auth%')
-        );
+        $minkReference = new Reference(MinkExtension::MINK_ID);
 
-        $this->addDefinitionTag($def, EventDispatcherExtension::SUBSCRIBER_TAG);
-
-        $containerBuilder->setDefinition(
-            'basichttpauth.listener.sessions',
-            $def
+        $definition = new Definition(
+            AuthSessionListener::class,
+            [$minkReference, '%basichttpauth.parameters%']
         );
+        $definition->addTag(EventDispatcherExtension::SUBSCRIBER_TAG, ['priority' => 0]);
+
+        $container->setDefinition('basichttpauth.listener.session', $definition);
     }
 }

@@ -1,22 +1,26 @@
 <?php
 
-namespace Behat\BasicHttpAuthExtension\Context;
+namespace Behat\BasicHttpAuthExtension\Context\Initializer;
 
+use Behat\BasicHttpAuthExtension\Context\AuthContextInterface;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\Initializer\ContextInitializer;
 
 /**
  * Class BasicHttpAuthContextInitializer.
  */
-class BasicHttpAuthContextInitializer implements ContextInitializer
+class AuthContextInitializer implements ContextInitializer
 {
+
     /**
-     * @var array Context parameters
+     * @var array
+     *  An array of Basic Auth parameters.
      */
-    private $parameters = [];
+    private $parameters;
 
     /**
      * @param array $parameters
+     *  An array of Basic Auth parameters.
      */
     public function __construct(array $parameters)
     {
@@ -27,10 +31,11 @@ class BasicHttpAuthContextInitializer implements ContextInitializer
      * Initializes provided context.
      *
      * @param Context $context
+     *  The context object.
      */
     public function initializeContext(Context $context)
     {
-        if ($context instanceof BasicHttpAuthContextInterface) {
+        if ($context instanceof AuthContextInterface) {
             $context->setBasicHttpAuthParameters($this->parameters);
         }
     }
