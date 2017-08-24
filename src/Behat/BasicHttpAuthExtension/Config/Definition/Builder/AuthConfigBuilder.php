@@ -70,16 +70,18 @@ class AuthConfigBuilder
     }
 
     /**
-     * Returns closure for HTTP Auth parameters validation.
+     * Returns closure for HTTP Auth user validation.
      *
      * @return \Closure
      */
     protected function invalidUserParameter()
     {
-        return \Closure::fromCallable(function ($v) {
+        $userValidator = function ($user) {
             // Valid values are false or not empty string.
-            return !(false === $v || (is_string($v) && '' !== $v));
-        });
+            return !(false === $user || (is_string($user) && '' !== $user));
+        };
+
+        return \Closure::fromCallable($userValidator);
     }
 
     /**
@@ -106,15 +108,17 @@ class AuthConfigBuilder
     }
 
     /**
-     * Returns closure for HTTP Auth parameters validation.
+     * Returns closure for HTTP Auth password validation.
      *
      * @return \Closure
      */
     protected function invalidPasswordParameter()
     {
-        return \Closure::fromCallable(function ($v) {
+        $passwordValidator = function ($pass) {
             // Valid values are null or false or any string.
-            return !(null === $v || false === $v || is_string($v));
-        });
+            return !(null === $pass || false === $pass || is_string($pass));
+        };
+
+        return \Closure::fromCallable($passwordValidator);
     }
 }
