@@ -76,12 +76,10 @@ class AuthConfigBuilder
      */
     protected function invalidUserParameter()
     {
-        $userValidator = function ($user) {
+        return \Closure::fromCallable(function ($v) {
             // Valid values are false or not empty string.
-            return !(false === $user || (is_string($user) && '' !== $user));
-        };
-
-        return \Closure::fromCallable($userValidator);
+            return !(false === $v || (is_string($v) && '' !== $v));
+        });
     }
 
     /**
@@ -114,11 +112,9 @@ class AuthConfigBuilder
      */
     protected function invalidPasswordParameter()
     {
-        $passwordValidator = function ($pass) {
+         return \Closure::fromCallable(function ($v) {
             // Valid values are null or false or any string.
-            return !(null === $pass || false === $pass || is_string($pass));
-        };
-
-        return \Closure::fromCallable($passwordValidator);
+            return !(null === $v || false === $v || is_string($v));
+        });
     }
 }
