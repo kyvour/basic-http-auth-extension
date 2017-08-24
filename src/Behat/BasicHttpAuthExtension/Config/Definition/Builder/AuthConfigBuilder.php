@@ -112,7 +112,7 @@ class AuthConfigBuilder
      */
     protected function invalidPasswordParameter()
     {
-         return function ($pass) {
+        return function ($pass) {
             // Valid password value is null or false or any string.
             return !(null === $pass || false === $pass || is_string($pass));
         };
