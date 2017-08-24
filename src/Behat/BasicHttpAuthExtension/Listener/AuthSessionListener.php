@@ -55,7 +55,10 @@ class AuthSessionListener implements EventSubscriberInterface
         }
 
         // Make sure that user and password settings exist in the auth config.
-        $config['auth'] = array_merge($this->defaultAuthConfig, $config['auth']);
+        $config['auth'] = array_merge(
+            $this->defaultAuthConfig,
+            $config['auth']
+        );
 
         return $config;
     }
