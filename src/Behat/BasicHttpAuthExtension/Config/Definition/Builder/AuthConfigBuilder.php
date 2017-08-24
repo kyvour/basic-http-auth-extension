@@ -76,10 +76,10 @@ class AuthConfigBuilder
      */
     protected function invalidUserParameter()
     {
-        return function ($v) {
+        return \Closure::fromCallable(function ($v) {
             // Valid values are false or not empty string.
             return !(false === $v || (is_string($v) && '' !== $v));
-        };
+        });
     }
 
     /**
@@ -112,9 +112,9 @@ class AuthConfigBuilder
      */
     protected function invalidPasswordParameter()
     {
-        return function ($v) {
+        return \Closure::fromCallable(function ($v) {
             // Valid values are null or false or any string.
             return !(null === $v || false === $v || is_string($v));
-        };
+        });
     }
 }
