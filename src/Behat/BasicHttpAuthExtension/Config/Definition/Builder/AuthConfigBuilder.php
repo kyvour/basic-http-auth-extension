@@ -62,14 +62,24 @@ class AuthConfigBuilder
             ->defaultFalse()
             ->treatNullLike(false)
             ->validate()
-                ->ifTrue(function ($v) {
-                    // Valid values are false or not empty string.
-                    return !(false === $v || (is_string($v) && '' !== $v));
-                })
+                ->ifTrue($this->invalidUserParameter())
                 ->thenInvalid('HTTP Auth user should be non empty string')
             ->end();
 
         return $user;
+    }
+
+    /**
+     * Returns closure for HTTP Auth user validation.
+     *
+     * @return \Closure
+     */
+    protected function invalidUserParameter()
+    {
+        return function ($v) {
+            // Valid values are false or not empty string.
+            return !(false === $v || (is_string($v) && '' !== $v));
+        };
     }
 
     /**
@@ -88,13 +98,23 @@ class AuthConfigBuilder
             ->treatFalseLike('')
             ->treatNullLike('')
             ->validate()
-                ->ifTrue(function ($v) {
-                    // Valid values are null or false or any string.
-                    return !(null === $v || false === $v || is_string($v));
-                })
+                ->ifTrue($this->invalidPasswordParameter())
                 ->thenInvalid('HTTP Auth password should be a string')
             ->end();
 
         return $password;
+    }
+
+    /**
+     * Returns closure for HTTP Auth password validation.
+     *
+     * @return \Closure
+     */
+    protected function invalidPasswordParameter()
+    {
+         return function ($v) {
+            // Valid values are null or false or any string.
+            return !(null === $v || false === $v || is_string($v));
+        };
     }
 }
