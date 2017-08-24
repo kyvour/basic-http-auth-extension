@@ -59,7 +59,7 @@ class BasicHttpAuthExtension implements ExtensionInterface
     public function configure(ArrayNodeDefinition $nodeBuilder)
     {
         $builder = new AuthConfigBuilder();
-        $nodeBuilder->append($builder->authNode());
+        $builder->appendAuthNode($nodeBuilder);
     }
 
     /**
