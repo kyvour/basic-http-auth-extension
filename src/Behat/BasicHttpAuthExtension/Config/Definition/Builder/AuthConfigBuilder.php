@@ -54,7 +54,8 @@ class AuthConfigBuilder
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */
-    protected function userNode() {
+    protected function userNode()
+    {
         $user = new ScalarNodeDefinition('user');
 
         $user->cannotBeEmpty()

@@ -55,6 +55,9 @@ class BasicHttpAuthExtension implements ExtensionInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
      */
     public function configure(ArrayNodeDefinition $nodeBuilder)
     {
@@ -64,6 +67,8 @@ class BasicHttpAuthExtension implements ExtensionInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Symfony\Component\DependencyInjection\Exception\BadMethodCallException
      */
     public function load(ContainerBuilder $container, array $config)
     {
@@ -77,6 +82,8 @@ class BasicHttpAuthExtension implements ExtensionInterface
      * Creates a definition for a context initializer.
      *
      * @param ContainerBuilder $container
+     *
+     * @throws \Symfony\Component\DependencyInjection\Exception\BadMethodCallException
      */
     private function loadContextInitializer(ContainerBuilder $container)
     {
@@ -84,9 +91,15 @@ class BasicHttpAuthExtension implements ExtensionInterface
             AuthContextInitializer::class,
             ['%basichttpauth.parameters%']
         );
-        $definition->addTag(ContextExtension::INITIALIZER_TAG, ['priority' => 0]);
+        $definition->addTag(
+            ContextExtension::INITIALIZER_TAG,
+            ['priority' => 0]
+        );
 
-        $container->setDefinition('basichttpauth.context.initializer', $definition);
+        $container->setDefinition(
+            'basichttpauth.context.initializer',
+            $definition
+        );
     }
 
     /**
@@ -94,6 +107,8 @@ class BasicHttpAuthExtension implements ExtensionInterface
      * queue in the service container.
      *
      * @param ContainerBuilder $container
+     *
+     * @throws \Symfony\Component\DependencyInjection\Exception\BadMethodCallException
      */
     private function loadSessionsListener(ContainerBuilder $container)
     {
@@ -103,8 +118,14 @@ class BasicHttpAuthExtension implements ExtensionInterface
             AuthSessionListener::class,
             [$minkReference, '%basichttpauth.parameters%']
         );
-        $definition->addTag(EventDispatcherExtension::SUBSCRIBER_TAG, ['priority' => 0]);
+        $definition->addTag(
+            EventDispatcherExtension::SUBSCRIBER_TAG,
+            ['priority' => 0]
+        );
 
-        $container->setDefinition('basichttpauth.listener.session', $definition);
+        $container->setDefinition(
+            'basichttpauth.listener.session',
+            $definition
+        );
     }
 }
