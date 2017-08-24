@@ -47,7 +47,8 @@ class AuthSessionListener implements EventSubscriberInterface
      *
      * @return array
      */
-    protected function validateConfig(array $config) {
+    protected function validateConfig(array $config)
+    {
         // Make sure that auth array exists in the extension's config.
         if (!is_array($config['auth'])) {
             $config['auth'] = [];
