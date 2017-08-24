@@ -22,17 +22,41 @@ class AuthSessionListener implements EventSubscriberInterface
     /**
      * @var array
      */
-    protected $parameters;
+    protected $config;
 
+    /**
+     * @var array
+     */
+    protected $defaultAuthConfig = [
+        'user' => false,
+        'password' => '',
+    ];
 
     /**
      * @param Mink $mink
-     * @param array $parameters
+     * @param array $config
      */
-    public function __construct(Mink $mink, array $parameters)
+    public function __construct(Mink $mink, array $config)
     {
         $this->mink = $mink;
-        $this->parameters = $parameters;
+        $this->config = $this->validateConfig($config);
+    }
+
+    /**
+     * @param array $config
+     *
+     * @return array
+     */
+    protected function validateConfig(array $config) {
+        // Make sure that auth array exists in the extension's config.
+        if (!is_array($config['auth'])) {
+            $config['auth'] = [];
+        }
+
+        // Make sure that user and password settings exist in the auth config.
+        $config['auth'] = array_merge($this->defaultAuthConfig, $config['auth']);
+
+        return $config;
     }
 
     /**
@@ -54,9 +78,7 @@ class AuthSessionListener implements EventSubscriberInterface
      */
     public function setBasicAuth()
     {
-        $auth = $this->parameters['auth'];
-
-        $this->mink->getSession()
-            ->setBasicAuth($auth['user'], $auth['password']);
+        list($user, $password) = $this->config['auth'];
+        $this->mink->getSession()->setBasicAuth($user, $password);
     }
 }
