@@ -1,3 +1,6 @@
+# this repository was moved to [https://github.com/andrew-yustyk/basic-http-auth-extension](https://github.com/andrew-yustyk/basic-http-auth-extension)
+
+
 # Basic Http Auth extension
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/kyvour/basic-http-auth-extension/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/kyvour/basic-http-auth-extension/?branch=master)
